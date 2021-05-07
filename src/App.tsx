@@ -1,12 +1,26 @@
-import React from 'react';
+import React, {useState} from 'react';
 import logo from './logo.svg';
 import {Card, Container} from 'react-bootstrap';
 import './App.css';
 import {Row} from "react-bootstrap";
 import FindTranslations from "./components/find-translations";
 import AddNewTranslation from "./components/add-new-translation";
+import WordTranslationModel from "./models/word-translation-model";
 
-function App() {
+interface Props {
+    initWordToTranslate: WordTranslationModel,
+    //onChange: (wordToTranslate: WordTranslationModel) => void
+    onUpdate(): void
+}
+
+
+function App({initWordToTranslate}: Props) {
+    const [wordForTranslation, setWordForTranslation] = useState<WordTranslationModel>({...initWordToTranslate});
+
+    const handleChange = (wordForTranslation: WordTranslationModel) => {
+        setWordForTranslation(wordForTranslation);
+    }
+
   return (
       <Container className="mt-5">
           <Card>
@@ -19,7 +33,7 @@ function App() {
          <Card className="mt-5">
              <Card.Body>
                  <Card.Title>Find translations for word:</Card.Title>
-                 <FindTranslations/>
+                 <FindTranslations wordToTranslate={wordForTranslation} onChange={handleChange}/>
              </Card.Body>
          </Card>
 
