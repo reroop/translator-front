@@ -3,7 +3,7 @@ import {Button, Container, Dropdown, DropdownButton, FormControl, InputGroup, To
 import MatchesEntryModel from "../models/matches-entry-model";
 
 
-//todo: get languages from api instead of hardcoding; add possibility to add new languages
+//todo: get languages from api instead of hardcoding; add possibility to add new languages when entering translations
 
 function AddNewTranslation() {
     const API = "http://localhost:8080/api/";
@@ -34,7 +34,6 @@ function AddNewTranslation() {
 
         if (matchesEntry.wordLanguage===initUserWordLanguage || !matchesEntry.word || matchesEntry.matchingWordLanguage===initTranslationLanguage
             || !matchesEntry.matchingWord || matchesEntry.wordLanguage===matchesEntry.matchingWordLanguage) {
-            //console.log("something was not entered correctly for matchesEntry, saving interrupted");
             setResponseToastText("Translation was not saved. Check your translation entries and try again!")
             //todo: on first unsuccessful save throws error, see console
             toggleShowResponseToast();
@@ -52,12 +51,12 @@ function AddNewTranslation() {
             //console.log(response);
             const responseStatus:number = response.status;
             if (responseStatus === 200) {
-                setResponseToastText("New translation was saved successfully!")
+                setResponseToastText("Translation is saved successfully!")
             } else {
                 setResponseToastText("Translation was not saved. Check your translation entries and try again!")
             }
             toggleShowResponseToast();
-        }) //.then(response => response.json()).then(response=>{console.log(response)})
+        })
 
 
     }
