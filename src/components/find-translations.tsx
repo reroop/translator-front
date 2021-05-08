@@ -7,6 +7,8 @@ interface Props {
     onChange: (wordToTranslate: WordTranslationModel) => void,
 }
 
+//todo: get languages from api instead of hardcoding
+
 function FindTranslations({wordToTranslate, onChange}: Props) {
     const [wordLanguageBtnTitle, setWordLanguageBtnTitle] = useState("Choose word language")
     const [translationLanguageBtnTitle, setTranslationLanguageBtnTitle] = useState("Choose translation language")
@@ -15,16 +17,16 @@ function FindTranslations({wordToTranslate, onChange}: Props) {
     const API = "http://localhost:8080/api/";
 
     const handleWordChange = (userWord: string) => {
-        onChange({...wordToTranslate, word: userWord});
+        onChange({...wordToTranslate, word: userWord.toLocaleLowerCase()});
     }
 
     const handleWordLanguageChange = (userWordLanguage: string) => {
-        onChange({...wordToTranslate, wordLanguage: userWordLanguage});
+        onChange({...wordToTranslate, wordLanguage: userWordLanguage.toLocaleLowerCase()});
         setWordLanguageBtnTitle(userWordLanguage)
     }
 
     const handleTranslationLanguageChange = (userTranslationLanguage: string) => {
-        onChange({...wordToTranslate, translationLanguage: userTranslationLanguage});
+        onChange({...wordToTranslate, translationLanguage: userTranslationLanguage.toLocaleLowerCase()});
         setTranslationLanguageBtnTitle(userTranslationLanguage)
     }
 
@@ -34,6 +36,11 @@ function FindTranslations({wordToTranslate, onChange}: Props) {
             setTranslationResult("Change word language or translation language to find translations!")
             return
         }
+        if (!wordToTranslate.word || !wordToTranslate.wordLanguage || !wordToTranslate.translationLanguage) {
+            setTranslationResult("Change word language, translation language or enter a word to find translations!")
+            return
+        }
+
 
         const queryURL = "matches/"+wordToTranslate.wordLanguage+"/"+wordToTranslate.word+"/"+wordToTranslate.translationLanguage;
         const response = await fetch(API+queryURL)

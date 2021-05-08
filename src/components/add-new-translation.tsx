@@ -1,21 +1,27 @@
 import React, {useState} from 'react';
-import {Button, Container, Dropdown, DropdownButton, FormControl, InputGroup} from "react-bootstrap";
+import {Button, Container, Dropdown, DropdownButton, FormControl, InputGroup, Toast} from "react-bootstrap";
 import MatchesEntryModel from "../models/matches-entry-model";
+
+
+//todo: get languages from api instead of hardcoding; add possibility to add new languages
 
 function AddNewTranslation() {
     const API = "http://localhost:8080/api/";
+    const initUserWordLanguage = "Choose word language";
+    const initTranslationLanguage = "Choose translation language";
 
-    const [userWordLanguage, setUserWordLanguage] = useState("Choose word language")
-    const [translationLanguage, setTranslationLanguage] = useState("Choose translation language")
+    const [userWordLanguage, setUserWordLanguage] = useState(initUserWordLanguage)
+    const [translationLanguage, setTranslationLanguage] = useState(initTranslationLanguage)
     const [userWord, setUserWord] = useState("")
     const [translationWord, setTranslationWord] = useState("")
 
+    const [showResponseToast, setShowResponseToast] = useState(false);
+    const [responseToastText, setResponseToastText] = useState("");
+    const toggleShowResponseToast = () => setShowResponseToast(!showResponseToast);
+
     const handleWordLanguageChange = (userWordLanguage: string) => {setUserWordLanguage(userWordLanguage)}
-
     const handleWordChange = (userWord: string) => {setUserWord(userWord);}
-
     const handleTranslationLanguageChange = (userTranslationLanguage: string) => {setTranslationLanguage(userTranslationLanguage)}
-
     const handleTranslationWordChange = (userTranslationWord: string) => {setTranslationWord(userTranslationWord);}
 
     const handleSaveNewTranslation = async () => {
@@ -26,6 +32,15 @@ function AddNewTranslation() {
             matchingWord: translationWord
         }
 
+        if (matchesEntry.wordLanguage===initUserWordLanguage || !matchesEntry.word || matchesEntry.matchingWordLanguage===initTranslationLanguage
+            || !matchesEntry.matchingWord || matchesEntry.wordLanguage===matchesEntry.matchingWordLanguage) {
+            //console.log("something was not entered correctly for matchesEntry, saving interrupted");
+            setResponseToastText("Translation was not saved. Check your translation entries and try again!")
+            //todo: on first unsuccessful save throws error, see console
+            toggleShowResponseToast();
+            return;
+        }
+
         const response = await fetch(API + "words/saveNewTranslation", {
             "method": "POST",
             "headers": {
@@ -33,7 +48,17 @@ function AddNewTranslation() {
                 "accept": "application/json"
             },
             "body": JSON.stringify(matchesEntry)
-        })//.then(response => response.json()).then(response=>{console.log(response)})
+        }).then(response => {
+            //console.log(response);
+            const responseStatus:number = response.status;
+            if (responseStatus === 200) {
+                setResponseToastText("New translation was saved successfully!")
+            } else {
+                setResponseToastText("Translation was not saved. Check your translation entries and try again!")
+            }
+            toggleShowResponseToast();
+        }) //.then(response => response.json()).then(response=>{console.log(response)})
+
 
     }
 
@@ -84,6 +109,20 @@ function AddNewTranslation() {
                     <Button variant="success" onClick={()=>handleSaveNewTranslation()}>Save translation</Button>
                 </InputGroup.Append>
             </InputGroup>
+            <Toast show={showResponseToast}
+                   onClose={()=>toggleShowResponseToast()}
+                   autohide={true}
+                   style={{
+                       position: 'absolute',
+                       right: 0,
+                   }}
+            >
+                <Toast.Header>
+                    <strong className="mr-auto">Save result</strong>
+                    <small>just now</small>
+                </Toast.Header>
+                <Toast.Body>{responseToastText}</Toast.Body>
+            </Toast>
         </Container>
     )
 }
