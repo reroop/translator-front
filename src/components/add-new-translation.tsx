@@ -19,10 +19,18 @@ function AddNewTranslation() {
     const [responseToastText, setResponseToastText] = useState("");
     const toggleShowResponseToast = () => setShowResponseToast(!showResponseToast);
 
-    const handleWordLanguageChange = (userWordLanguage: string) => {setUserWordLanguage(userWordLanguage)}
-    const handleWordChange = (userWord: string) => {setUserWord(userWord);}
-    const handleTranslationLanguageChange = (userTranslationLanguage: string) => {setTranslationLanguage(userTranslationLanguage)}
-    const handleTranslationWordChange = (userTranslationWord: string) => {setTranslationWord(userTranslationWord);}
+    const handleWordLanguageChange = (userWordLanguage: string) => {
+        setUserWordLanguage(userWordLanguage)
+    }
+    const handleWordChange = (userWord: string) => {
+        setUserWord(userWord);
+    }
+    const handleTranslationLanguageChange = (userTranslationLanguage: string) => {
+        setTranslationLanguage(userTranslationLanguage)
+    }
+    const handleTranslationWordChange = (userTranslationWord: string) => {
+        setTranslationWord(userTranslationWord);
+    }
 
     const handleSaveNewTranslation = async () => {
         let matchesEntry: MatchesEntryModel = {
@@ -32,8 +40,8 @@ function AddNewTranslation() {
             matchingWord: translationWord
         }
 
-        if (matchesEntry.wordLanguage===initUserWordLanguage || !matchesEntry.word || matchesEntry.matchingWordLanguage===initTranslationLanguage
-            || !matchesEntry.matchingWord || matchesEntry.wordLanguage===matchesEntry.matchingWordLanguage) {
+        if (matchesEntry.wordLanguage === initUserWordLanguage || !matchesEntry.word || matchesEntry.matchingWordLanguage === initTranslationLanguage
+            || !matchesEntry.matchingWord || matchesEntry.wordLanguage === matchesEntry.matchingWordLanguage) {
             setResponseToastText("Translation was not saved. Check your translation entries and try again!")
             //todo: on first unsuccessful save throws error, see console
             toggleShowResponseToast();
@@ -48,8 +56,7 @@ function AddNewTranslation() {
             },
             "body": JSON.stringify(matchesEntry)
         }).then(response => {
-            //console.log(response);
-            const responseStatus:number = response.status;
+            const responseStatus: number = response.status;
             if (responseStatus === 200) {
                 setResponseToastText("Translation is saved successfully!")
             } else {
@@ -70,9 +77,12 @@ function AddNewTranslation() {
                     title={userWordLanguage}
                     id="dropdown-word-language"
                 >
-                    <Dropdown.Item value={"estonian"} onClick={()=>handleWordLanguageChange("estonian")}>Estonian</Dropdown.Item>
-                    <Dropdown.Item value={"english"} onClick={()=>handleWordLanguageChange("english")}>English</Dropdown.Item>
-                    <Dropdown.Item value={"spanish"} onClick={()=>handleWordLanguageChange("spanish")}>Spanish</Dropdown.Item>
+                    <Dropdown.Item value={"estonian"}
+                                   onClick={() => handleWordLanguageChange("estonian")}>Estonian</Dropdown.Item>
+                    <Dropdown.Item value={"english"}
+                                   onClick={() => handleWordLanguageChange("english")}>English</Dropdown.Item>
+                    <Dropdown.Item value={"spanish"}
+                                   onClick={() => handleWordLanguageChange("spanish")}>Spanish</Dropdown.Item>
 
                 </DropdownButton>
 
@@ -81,7 +91,7 @@ function AddNewTranslation() {
                     placeholder="Enter word"
                     aria-label="entered-word"
                     aria-describedby="entered-word"
-                    onChange={(e)=>handleWordChange(e.target.value)}
+                    onChange={(e) => handleWordChange(e.target.value)}
                 />
 
                 <DropdownButton
@@ -90,9 +100,12 @@ function AddNewTranslation() {
                     title={translationLanguage}
                     id="word-translation-language"
                 >
-                    <Dropdown.Item value={"estonian"} onClick={()=>handleTranslationLanguageChange("estonian")}>Estonian</Dropdown.Item>
-                    <Dropdown.Item value={"english"} onClick={()=>handleTranslationLanguageChange("english")}>English</Dropdown.Item>
-                    <Dropdown.Item value={"spanish"} onClick={()=>handleTranslationLanguageChange("spanish")}>Spanish</Dropdown.Item>
+                    <Dropdown.Item value={"estonian"}
+                                   onClick={() => handleTranslationLanguageChange("estonian")}>Estonian</Dropdown.Item>
+                    <Dropdown.Item value={"english"}
+                                   onClick={() => handleTranslationLanguageChange("english")}>English</Dropdown.Item>
+                    <Dropdown.Item value={"spanish"}
+                                   onClick={() => handleTranslationLanguageChange("spanish")}>Spanish</Dropdown.Item>
 
                 </DropdownButton>
 
@@ -101,15 +114,15 @@ function AddNewTranslation() {
                     placeholder="Enter translation for word"
                     aria-label="entered-word"
                     aria-describedby="entered-word"
-                    onChange={(e)=>handleTranslationWordChange(e.target.value)}
+                    onChange={(e) => handleTranslationWordChange(e.target.value)}
                 />
 
                 <InputGroup.Append>
-                    <Button variant="success" onClick={()=>handleSaveNewTranslation()}>Save translation</Button>
+                    <Button variant="success" onClick={() => handleSaveNewTranslation()}>Save translation</Button>
                 </InputGroup.Append>
             </InputGroup>
             <Toast show={showResponseToast}
-                   onClose={()=>toggleShowResponseToast()}
+                   onClose={() => toggleShowResponseToast()}
                    autohide={true}
                    style={{
                        position: 'absolute',

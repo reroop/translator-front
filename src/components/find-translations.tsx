@@ -7,7 +7,7 @@ interface Props {
     onChange: (wordToTranslate: WordTranslationModel) => void,
 }
 
-//todo: get languages from api instead of hardcoding
+//todo: get and set languages from api instead of hardcoding
 
 function FindTranslations({wordToTranslate, onChange}: Props) {
     const [wordLanguageBtnTitle, setWordLanguageBtnTitle] = useState("Choose word language")
@@ -42,8 +42,8 @@ function FindTranslations({wordToTranslate, onChange}: Props) {
         }
 
 
-        const queryURL = "matches/"+wordToTranslate.wordLanguage+"/"+wordToTranslate.word+"/"+wordToTranslate.translationLanguage;
-        const response = await fetch(API+queryURL)
+        const queryURL = "matches/" + wordToTranslate.wordLanguage + "/" + wordToTranslate.word + "/" + wordToTranslate.translationLanguage;
+        const response = await fetch(API + queryURL)
 
         try {
             let data = await response.json()
@@ -73,9 +73,12 @@ function FindTranslations({wordToTranslate, onChange}: Props) {
                     title={wordLanguageBtnTitle}
                     id="dropdown-word-language"
                 >
-                    <Dropdown.Item value={"estonian"} onClick={()=>handleWordLanguageChange("estonian")}>Estonian</Dropdown.Item>
-                    <Dropdown.Item value={"english"} onClick={()=>handleWordLanguageChange("english")}>English</Dropdown.Item>
-                    <Dropdown.Item value={"spanish"} onClick={()=>handleWordLanguageChange("spanish")}>Spanish</Dropdown.Item>
+                    <Dropdown.Item value={"estonian"}
+                                   onClick={() => handleWordLanguageChange("estonian")}>Estonian</Dropdown.Item>
+                    <Dropdown.Item value={"english"}
+                                   onClick={() => handleWordLanguageChange("english")}>English</Dropdown.Item>
+                    <Dropdown.Item value={"spanish"}
+                                   onClick={() => handleWordLanguageChange("spanish")}>Spanish</Dropdown.Item>
                 </DropdownButton>
 
                 <FormControl
@@ -83,7 +86,7 @@ function FindTranslations({wordToTranslate, onChange}: Props) {
                     placeholder="Enter your word here..."
                     aria-label="entered-word"
                     aria-describedby="entered-word"
-                    onChange={(e)=>handleWordChange(e.target.value)}
+                    onChange={(e) => handleWordChange(e.target.value)}
                 />
 
                 <DropdownButton
@@ -92,14 +95,17 @@ function FindTranslations({wordToTranslate, onChange}: Props) {
                     title={translationLanguageBtnTitle}
                     id="word-translation-language"
                 >
-                    <Dropdown.Item value={"estonian"} onClick={()=>handleTranslationLanguageChange("estonian")}>Estonian</Dropdown.Item>
-                    <Dropdown.Item value={"english"} onClick={()=>handleTranslationLanguageChange("english")}>English</Dropdown.Item>
-                    <Dropdown.Item value={"spanish"} onClick={()=>handleTranslationLanguageChange("spanish")}>Spanish</Dropdown.Item>
+                    <Dropdown.Item value={"estonian"}
+                                   onClick={() => handleTranslationLanguageChange("estonian")}>Estonian</Dropdown.Item>
+                    <Dropdown.Item value={"english"}
+                                   onClick={() => handleTranslationLanguageChange("english")}>English</Dropdown.Item>
+                    <Dropdown.Item value={"spanish"}
+                                   onClick={() => handleTranslationLanguageChange("spanish")}>Spanish</Dropdown.Item>
 
                 </DropdownButton>
 
                 <InputGroup.Append>
-                    <Button variant="success" onClick={()=>handleFindTranslations()}>Find translations</Button>
+                    <Button variant="success" onClick={() => handleFindTranslations()}>Find translations</Button>
                 </InputGroup.Append>
             </InputGroup>
 
@@ -113,7 +119,7 @@ function FindTranslations({wordToTranslate, onChange}: Props) {
             </Container>
         </Container>
 
-        )
+    )
 
 }
 
